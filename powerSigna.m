@@ -5,6 +5,7 @@ function Power = powerSigna( xmax,  ymax,  nWalls,  nSources, Walls, Sources, nA
     C = 299792458.0;
     EPS_0 = 8.85418782e-12;
     
+    gaby = 0;
     
     f = app;
     d = uiprogressdlg(f,'Title','Please Wait',...
@@ -70,9 +71,13 @@ function Power = powerSigna( xmax,  ymax,  nWalls,  nSources, Walls, Sources, nA
                         
                         theta_i = selectAngle(Walls(wall,1), Walls(wall,2), Walls(wall,3), Walls(wall,4),theta_iv,theta_ih);
                         %theta_i = angle_i(xr, yr, xs, ys, Walls(m,1), Walls(m,2), Walls(m,3), Walls(m,4));
-                        theta_t = angle_t(theta_i,Walls(wall,5), EPS_0);
+                        if gaby == 1
+                            theta_t = angle_t(theta_i,Walls(wall,5), EPS_0);
+                        else
+                            theta_t = theta_i;
+                        end
                         
-                        TR = TR * reflection(theta_i,theta_t,Walls(wall,5)*1e-12, Walls(wall,6), Walls(wall,7),  EPS_0, MU_0, pulsation, C);
+                        TR = TR * reflection(theta_i,theta_t,Walls(wall,5), Walls(wall,6), Walls(wall,7),  EPS_0, MU_0, pulsation, C);
                         
                         % Check for TRANSMISSION between two reflections
                         for  m = 1 : nWalls
@@ -81,9 +86,13 @@ function Power = powerSigna( xmax,  ymax,  nWalls,  nSources, Walls, Sources, nA
                                 
                                 theta_i = selectAngle(Walls(m,1), Walls(m,2), Walls(m,3), Walls(m,4),theta_iv,theta_ih);
                                 %theta_i = angle_i(xr, yr, xs, ys, Walls(m,1), Walls(m,2), Walls(m,3), Walls(m,4));
-                                theta_t = angle_t(theta_i,Walls(m,5), EPS_0);
+                                if gaby == 1
+                                    theta_t = angle_t(theta_i,Walls(m,5), EPS_0);
+                                else
+                                    theta_t = theta_i;
+                                end
                                 
-                                TR = TR * transmission(theta_i,theta_t,Walls(m,5)*1e-12, Walls(m,6), Walls(m,7),EPS_0, MU_0, pulsation, C);
+                                TR = TR * transmission(theta_i,theta_t,Walls(m,5), Walls(m,6), Walls(m,7),EPS_0, MU_0, pulsation, C);
                             end
                             
                         end
@@ -114,9 +123,14 @@ function Power = powerSigna( xmax,  ymax,  nWalls,  nSources, Walls, Sources, nA
                             
                             theta_i = selectAngle(Walls(m,1), Walls(m,2), Walls(m,3), Walls(m,4), theta_iv, theta_ih);
                             %theta_i = angle_i(xr, yr, xs, ys, Walls(m,1), Walls(m,2), Walls(m,3), Walls(m,4));
-                            theta_t = angle_t(theta_i,Walls(m,5), EPS_0);
+                            if gaby == 1
+                                theta_t = angle_t(theta_i,Walls(m,5), EPS_0);
+                            else
+                                theta_t = theta_i;
+                            end
                             
-                            TR = TR * transmission(theta_i,theta_t,Walls(m,5)*1e-12,Walls(m,6),Walls(m,7),EPS_0, MU_0, pulsation, C);
+                            
+                            TR = TR * transmission(theta_i,theta_t,Walls(m,5),Walls(m,6),Walls(m,7),EPS_0, MU_0, pulsation, C);
                             
                         end
                     end
@@ -124,10 +138,12 @@ function Power = powerSigna( xmax,  ymax,  nWalls,  nSources, Walls, Sources, nA
                     E = TR * factor * exp(-1i*beta*d_ray) / d_ray;  % Each source point has its own ray path and TR associated
                 end
                 
-                Esum =Esum+ he*norm(E);
+                %Esum =Esum+ he*norm(E);
+                Esum =Esum+ norm(E)^2;
                 %(*Power)[iy*(nx+1)+ix] += 1/(8*Ra)*he*he*abs(E)*abs(E);
             end
-            Power(iy,ix) = 1/(8*Ra)* norm(Esum)^2;
+            %Power(iy,ix) = 1/(8*Ra)* norm(Esum)^2;
+            Power(iy,ix) = 1/(8*Ra)* he^2 * Esum;
             else
                 Power(iy,ix) = 1e-6;
             end
