@@ -8,4 +8,5 @@ function r = transmission(theta_i, theta_t, eps, sigma, width,EPS_0, MU_0, pulsa
     NUM = (1-R_perp*R_perp) * exp(-gamma_m*s);
     DEN = 1 - R_perp*R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
     r=NUM/DEN;
+end
 

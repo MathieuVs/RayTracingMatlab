@@ -1,0 +1,28 @@
+function Power = mainRay(xmax, ymax, Walls, Antennas, STEP, app)
+timeS = tic;
+nWalls = size(Walls,1);
+nAntennas = size(Antennas,1);
+
+[Sources]= sourceCreator(Walls, Antennas);
+Power = powerSigna( xmax,  ymax, Walls, Sources,Antennas,STEP, app);
+%makeGraph(Power,xmax, ymax, Walls, nWalls, Antennas, nAntennas,0.01)
+log_power=10* log10(Power/0.001);
+
+%save('powerNew','log_power');
+disp(['Enlapsed : ' num2str(toc(timeS))]);
+
+hold on
+imagesc([STEP/2 xmax-STEP/2],[STEP/2 ymax-STEP/2],log_power)
+colorbar
+colormap jet
+axis([0 xmax 0 ymax])
+
+%heatmap(y,x , log(Power),'Colormap',jet,'GridVisible','off');
+%line([app.walls(1,1),app.walls(1,3)],[app.walls(1,2),app.walls(1,4)]);
+for k=1:nWalls
+    plot([Walls(k).X1,Walls(k).X2],[Walls(k).Y1,Walls(k).Y2],'k')
+end
+for k=1:nAntennas
+    scatter(Antennas(k,1),Antennas(k,2), 'k')
+end
+end
