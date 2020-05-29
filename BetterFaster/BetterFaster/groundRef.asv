@@ -1,0 +1,16 @@
+function TR = groundRef(dist,groundProp,baseHeight)
+    epsilon = groundProp(1);
+    sigma = groundProp(2);
+    theta_i = atan(dist/(2*baseHeight));
+    theta_t = asin(sqrt(PrjCst.EPS_0/epsilon) * sin(theta_i));
+
+    eps_tilde = obj.Epsilon - 1i*(obj.Sigma/PrjCst.pulsation);
+
+    R_perp = obj.coeffPerp(theta_i, theta_t);
+    s = obj.Thickness / cos(theta_t);
+    gamma_m = 1i * PrjCst.pulsation * sqrt(PrjCst.MU_0*eps_tilde);
+    beta = PrjCst.pulsation/PrjCst.C;
+
+    NUM = R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
+    DEN = 1 - R_perp*R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
+    r = R_perp + (1 - R_perp * R_perp) * NUM/DEN;

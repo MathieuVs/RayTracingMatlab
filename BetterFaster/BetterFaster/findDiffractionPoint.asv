@@ -13,24 +13,24 @@ end
 resX = nan;
 resY = nan;
 possible = 0;
-if nCross > 1
+if nCross == 1
     not1 = 0;
     not2 = 0;
     for w = 1:size(walls)
         [res1, x1,y1] = walls(w).intersect(xs,ys,walls(crossWall).X1,walls(crossWall).Y1);
         [res2, x2,y2] = walls(w).intersect(walls(crossWall).X1,walls(crossWall).Y1,xr,yr);
-        if res1 && ((abs(x1-walls(w).X1 + y1-walls(w).Y1)>1e-3) && (abs(x1-walls(w).X2 + y1-walls(w).Y2)>1e-3))
+        if res1 && (x1 ~= walls(w).X1 || y1 ~= walls(w).Y1)
             not1 = 1;
         end
-        if res2 && ((abs(x2-walls(w).X1 + y2-walls(w).Y1)>1e-3) && (abs(x2-walls(w).X2 + y2-walls(w).Y2)>1e-3))
+        if res2 && (x2 ~= walls(crossWall).X1 || y2 ~= walls(crossWall).Y1)
             not1 = 1;
         end
         [res1, x1,y1] = walls(w).intersect(xs,ys,walls(crossWall).X2,walls(crossWall).Y2);
         [res2, x2,y2] = walls(w).intersect(walls(crossWall).X2,walls(crossWall).Y2,xr,yr);
-        if res1 && ((abs(x1-walls(w).X1 + y1-walls(w).Y1)>1e-3) && (abs(x1-walls(w).X2 + y1-walls(w).Y2)>1e-3))
+        if res1 && (x1 ~= walls(crossWall).X2 || y1 ~= walls(crossWall).Y2)
             not2 = 1;
         end
-        if res2 && ((abs(x2-walls(w).X1 + y2-walls(w).Y1)>1e-3) && (abs(x2-walls(w).X2 + y2-walls(w).Y2)>1e-3))
+        if res2 && (x2 ~= walls(crossWall).X2 || y2 ~= walls(crossWall).Y2)
             not2 = 1;
         end
     end

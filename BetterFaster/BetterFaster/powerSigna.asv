@@ -122,11 +122,9 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
                                 [possible, resX, resY] = findDiffractionPoint(xs,ys,xr,yr,Walls);
                                 if possible
                                     delta_r = (dist(xr,yr,resX,resY)+dist(resX,resY,xs,ys))-d_ray;
-                                    nu = sqrt((2*PrjCst.beta*delta_r)/pi);
-                                    norm_F = 0.2/(sqrt(((nu-0.1)^2)+1)+nu-0.1)^2;
-                                    arg_F = -pi/4 -(pi/2)*nu^2;
-                                    F = sqrt(norm_F)*exp(1j*arg_F);
-                                    E = F * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray;
+                                    nu = sqrt((2*beta*delta_r)/pi);
+                                    diff_factor = 
+                                    E = 1 * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray;
                                 else
                                     E = 0
                                 end
