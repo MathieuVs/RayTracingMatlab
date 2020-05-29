@@ -1,2 +1,2 @@
-function [walls, antennas] = loadLayout(fileName)
-load(fileName, "walls", "antennas");
+function [walls, antennas,reflection, border] = loadLayout(fileName)
+load(fileName, "walls", "antennas","reflection","border");

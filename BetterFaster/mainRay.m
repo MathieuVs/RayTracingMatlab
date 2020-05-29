@@ -1,10 +1,12 @@
-function Power = mainRay(xmax, ymax, Walls, Antennas, STEP, app)
+function Power = mainRay(xmax, ymax, Walls, Antennas, borderBox, reflectBox, STEP, app)
 timeS = tic;
 nWalls = size(Walls,1);
 nAntennas = size(Antennas,1);
 
+[borderCells, reflectCells] = boderCheck(borderBox,reflectBox,maxX,maxY,STEP);
+
 [Sources]= sourceCreator(Walls, Antennas);
-Power = powerSigna( xmax,  ymax, Walls, Sources,Antennas,STEP, app);
+Power = powerSigna( xmax,  ymax, Walls, Sources,Antennas,STEP, app, reflectCells, borderCells);
 %makeGraph(Power,xmax, ymax, Walls, nWalls, Antennas, nAntennas,0.01)
 log_power=10* log10(Power/0.001);
 
