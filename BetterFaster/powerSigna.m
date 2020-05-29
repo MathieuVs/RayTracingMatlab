@@ -58,6 +58,7 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
                         E = 0.0; 
                         TR = 1.0;
                         xs = Sources(source,1); ys = Sources(source,2); % source position
+                        direct_path = nRef == 0;
 
                         x1 = xr; y1 = yr;
                         x2 = xs; y2 = ys;
@@ -112,6 +113,9 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
                                     TR = TR * Walls(m).transmission(xr, yr, xs, ys);
                                 end
 
+                            end
+                            if direct_Path
+                                % Ground reflection here
                             end
                             d_ray = dist(xr,yr,xs,ys);
                             E = TR * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray;  % Each source point has its own ray path and TR associated

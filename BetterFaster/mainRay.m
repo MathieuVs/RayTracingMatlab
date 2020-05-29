@@ -3,7 +3,7 @@ timeS = tic;
 nWalls = size(Walls,1);
 nAntennas = size(Antennas,1);
 
-[borderCells, reflectCells] = boderCheck(borderBox,reflectBox,maxX,maxY,STEP);
+[borderCells, reflectCells] = boderCheck(borderBox,reflectBox,xmax,ymax,STEP);
 
 [Sources]= sourceCreator(Walls, Antennas);
 Power = powerSigna( xmax,  ymax, Walls, Sources,Antennas,STEP, app, reflectCells, borderCells);
