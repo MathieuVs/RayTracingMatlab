@@ -7,6 +7,10 @@ nAntennas = size(Antennas,1);
 
 [Sources]= sourceCreator(Walls, Antennas);
 Power = powerSigna( xmax,  ymax, Walls, Sources,Antennas,STEP, app, reflectCells, borderCells);
+
+%pathLos = pathLoss( 6,  1, 6, 16, Walls, Sources, Antennas,2000);
+semilogx(db(pathLos,'power'));
+figure
 %makeGraph(Power,xmax, ymax, Walls, nWalls, Antennas, nAntennas,0.01)
 log_power=10* log10(Power/0.001);
 

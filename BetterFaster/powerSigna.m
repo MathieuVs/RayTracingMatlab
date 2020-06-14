@@ -17,11 +17,16 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
     Power=zeros(ny,nx);
     
     % Antenna parameters
-    Ra = 73; % resistance antenne p 94 sylla !!!
+    Ra = 73; % resistance antenne p 94 sylla !!!   % May be to remove in power equation to compute EIRP
     he = 0.019; % hauteur équivalente
-    GTX = sqrt(PrjCst.MU_0/PrjCst.EPS_0)/(pi*Ra); % Gain antenne
-    PTX = 0.1; % PTX = 20 dBm = 0.1W
-    factor = sqrt(60*GTX*PTX);
+    %GTX = sqrt(PrjCst.MU_0/PrjCst.EPS_0)/(pi*Ra); % Gain antenne
+    %PTX = 0.1; % PTX = 20 dBm = 0.1W
+    %factor = sqrt(60*GTX*PTX);
+    EIRP = 2;
+    factor = sqrt(60*EIRP);
+    
+    epsilonG = 4.6*PrjCst.EPS_0;
+    baseHeight = 10;
     
     
     % Loop through all the square
@@ -114,7 +119,10 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
 
                             end
                             if TR == 1.0
-                                % Ground reflection here
+                                TRG = groundRef(dist(xr,yr,xs,ys),epsilonG,baseHeight);
+                                d_ray = 2* sqrt((dist(xr,yr,xs,ys)/2)^2 + baseHeight^2);
+                                E = TRG * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray;
+                                Esum =Esum+ norm(E)^2;
                             end
                             if not(reflectCells(ix,iy)) && Sources(source , 3) == 0 && TR ~= 1.0
                                 % Difraction
