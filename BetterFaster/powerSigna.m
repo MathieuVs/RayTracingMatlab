@@ -35,7 +35,8 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
     else
         parforArg = Inf;
     end
-    parfor (iy = 1 : ny ,parforArg)
+    %parfor (iy = 1 : ny ,parforArg)
+    for iy = 1 : ny
         for ix = 1 : nx
             
             if borderCells(ix,iy) == 0
@@ -125,6 +126,9 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
                                 E = TRG * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray * cos(pi/2*cos(theta_G))/(sin(theta_G))^2;
                                 Esum =Esum+ E;
                             end
+                            if(xr == 0.25 && yr == 15.75)
+                                disp('hey')
+                            end
                             if not(reflectCells(ix,iy)) && Sources(source , 3) == 0 && TR ~= 1.0
                                 % Difraction
                                 d_ray = dist(xr,yr,xs,ys);
@@ -137,7 +141,7 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
                                     F = sqrt(norm_F)*exp(1j*arg_F);
                                     E = F * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray;
                                 else
-                                    E = 0
+                                    E = 0;
                                 end
                             else
                                 d_ray = dist(xr,yr,xs,ys);
