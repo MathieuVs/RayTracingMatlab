@@ -33,7 +33,7 @@ function [SourceOut]= sourceCreator(Walls, Antennas)
     end
     
     %second and third reflections
-    if(size(Sources,1)>1)
+    if(size(Sources,1)>nAntennas)
     index = nAntennas+1;
     nRef = 1;
     while(nRef < MAX_REFLECTIONS)

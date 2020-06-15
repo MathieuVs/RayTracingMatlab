@@ -18,7 +18,7 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
     
     % Antenna parameters
     Ra = 73; % resistance antenne p 94 sylla !!!   % May be to remove in power equation to compute EIRP
-    he = 0.019; % hauteur équivalente
+    he = PrjCst.lambda/pi; % hauteur équivalente
     %GTX = sqrt(PrjCst.MU_0/PrjCst.EPS_0)/(pi*Ra); % Gain antenne
     %PTX = 0.1; % PTX = 20 dBm = 0.1W
     %factor = sqrt(60*GTX*PTX);
@@ -121,8 +121,9 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
                             if TR == 1.0
                                 TRG = groundRef(dist(xr,yr,xs,ys),epsilonG,baseHeight);
                                 d_ray = 2* sqrt((dist(xr,yr,xs,ys)/2)^2 + baseHeight^2);
-                                E = TRG * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray;
-                                Esum =Esum+ norm(E)^2;
+                                theta_G = pi - pi/2 + atan(2*baseHeight/d_ray);
+                                E = TRG * factor * exp(-1i*PrjCst.beta*d_ray) / d_ray * cos(pi/2*cos(theta_G))/(sin(theta_G))^2;
+                                Esum =Esum+ E;
                             end
                             if not(reflectCells(ix,iy)) && Sources(source , 3) == 0 && TR ~= 1.0
                                 % Difraction
@@ -144,12 +145,14 @@ function Power = powerSigna( xmax,  ymax, Walls, Sources, Antennas,STEP, app, re
                             end
                         end
                         %Esum =Esum+ he*norm(E);
-                        Esum =Esum+ norm(E)^2;
+                        %Esum =Esum+ abs(E)^2;
+                        Esum =Esum+ E;
                         %(*Power)[iy*(nx+1)+ix] += 1/(8*Ra)*he*he*abs(E)*abs(E);
                         end
                     end
                 %Power(iy,ix) = 1/(8*Ra)* norm(Esum)^2;
-                Power(iy,ix) = 1/(8*Ra)* he^2 * Esum;
+                %Power(iy,ix) = 1/(8*Ra)* he^2 * Esum;
+                Power(iy,ix) = 1/(8*Ra)* he^2 * abs(Esum)^2;
                 else
                     Power(iy,ix) = 1e-6;
                 end

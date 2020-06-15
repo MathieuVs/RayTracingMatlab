@@ -147,18 +147,22 @@ classdef Wall
         
         function r = reflection(obj,x1, y1, x2, y2)
             theta_i = obj.angle_i(x1, y1, x2, y2);
-            theta_t = obj.angle_t(theta_i);
-
-            eps_tilde = obj.Epsilon - 1i*(obj.Sigma/PrjCst.pulsation);
-
-            R_perp = obj.coeffPerp(theta_i, theta_t);
-            s = obj.Thickness / cos(theta_t);
-            gamma_m = 1i * PrjCst.pulsation * sqrt(PrjCst.MU_0*eps_tilde);
-            beta = PrjCst.pulsation/PrjCst.C;
-
-            NUM = R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
-            DEN = 1 - R_perp*R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
-            r = R_perp + (1 - R_perp * R_perp) * NUM/DEN;
+%             theta_t = obj.angle_t(theta_i);
+% 
+%             eps_tilde = obj.Epsilon - 1i*(obj.Sigma/PrjCst.pulsation);
+% 
+%             R_perp = obj.coeffPerp(theta_i, theta_t);
+%             s = obj.Thickness / cos(theta_t);
+%             gamma_m = 1i * PrjCst.pulsation * sqrt(PrjCst.MU_0*eps_tilde);
+%             beta = PrjCst.pulsation/PrjCst.C;
+% 
+%             NUM = R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
+%             DEN = 1 - R_perp*R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
+%             r = R_perp + (1 - R_perp * R_perp) * NUM/DEN;
+            epsilon_r = obj.Epsilon/PrjCst.EPS_0;
+            NUM = cos(theta_i) - sqrt(epsilon_r) * sqrt(1-(1/epsilon_r)*(sin(theta_i)).^2);
+            DEN = cos(theta_i) + sqrt(epsilon_r) * sqrt(1-(1/epsilon_r)*(sin(theta_i)).^2);
+            r = NUM/DEN;
         end
         
         function r_perp = coeffPerp(ojb, theta_i, theta_t)
@@ -169,19 +173,20 @@ classdef Wall
         end
         
         function r = transmission(obj, x1, y1, x2, y2)
-            theta_i = obj.angle_i(x1, y1, x2, y2);
-            theta_t = obj.angle_t(theta_i);
-
-            eps_tilde = obj.Epsilon - 1i*(obj.Sigma/PrjCst.pulsation);
-            
-            R_perp = obj.coeffPerp(theta_i, theta_t);
-            s = obj.Thickness / cos(theta_t);
-            gamma_m = 1i * PrjCst.pulsation * sqrt(PrjCst.MU_0*eps_tilde);
-            beta = PrjCst.pulsation/PrjCst.C;
-            
-            NUM = (1-R_perp*R_perp) * exp(-gamma_m*s);
-            DEN = 1 - R_perp*R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
-            r=NUM/DEN;
+%             theta_i = obj.angle_i(x1, y1, x2, y2);
+%             theta_t = obj.angle_t(theta_i);
+% 
+%             eps_tilde = obj.Epsilon - 1i*(obj.Sigma/PrjCst.pulsation);
+%             
+%             R_perp = obj.coeffPerp(theta_i, theta_t);
+%             s = obj.Thickness / cos(theta_t);
+%             gamma_m = 1i * PrjCst.pulsation * sqrt(PrjCst.MU_0*eps_tilde);
+%             beta = PrjCst.pulsation/PrjCst.C;
+%             
+%             NUM = (1-R_perp*R_perp) * exp(-gamma_m*s);
+%             DEN = 1 - R_perp*R_perp * exp(-2*gamma_m*s) * exp(1i*2*beta*s*sin(theta_t)*sin(theta_i));
+%             r=NUM/DEN;
+            r = 0;
         end
         
         function [xi,yi] = sym_orth(obj, xs, ys)

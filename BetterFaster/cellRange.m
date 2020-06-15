@@ -34,7 +34,7 @@ perc_cell_cov = 1 - 1/2 .* erfc(a) + 1./2.*exp(2.*a./b+1/b^2).*erfc(a+1/b);
 % figure
 % scatter(fade_margin/fadingVar,log(proba))
 figure
-plot(proba,Max_radius)
+plot(1-proba,Max_radius)
 title('Cell range')
 ylabel('Cell maximum radius[m]')
 xlabel('Probability of connection at cell edge')

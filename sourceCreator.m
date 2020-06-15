@@ -1,6 +1,6 @@
 function [nSources, Sources]= sourceCreator(nWalls, nAntennas, Walls, Antennas)
 
-
+    nAnt = size(Antennas,1);
     MAX_REFLECTIONS = 3;
     
     
@@ -35,7 +35,7 @@ function [nSources, Sources]= sourceCreator(nWalls, nAntennas, Walls, Antennas)
     end
     
     %second and third reflections
-    if(size(Sources,1)>1)
+    if(size(Sources,1)>nAnt)
     index = nAntennas+1;
     nRef = 1;
     while(nRef < MAX_REFLECTIONS)
